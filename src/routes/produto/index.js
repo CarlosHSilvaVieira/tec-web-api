@@ -8,6 +8,8 @@ app.get('/', (req, res, next) => {
 
 app.get('/all', produtoController.getAll)
 
+app.get('/limit/:limit', produtoController.getByLimit)
+
 app.post('/', produtoController.create)
 
 app.put('/', produtoController.update)
