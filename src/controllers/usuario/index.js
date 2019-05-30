@@ -114,7 +114,9 @@ class UsuarioController {
                 return res.status(200).json({ code: 500, resultado: null, error: `${this.tabela} não pode ser atualizado` })
             }
 
-            return res.status(200).json({ code: 200, resultado: results, error: null })
+            const user = { ...results[0], senha: null }
+
+            return res.status(200).json({ code: 200, resultado: user, error: null })
         })
     }
 
