@@ -14,6 +14,7 @@ class UsuarioController {
         this.delete = this.delete.bind(this)
 
         this.login = this.login.bind(this)
+        this.loginEmployeer = this.loginEmployeer.bind(this)
         this.alterPassword = this.alterPassword.bind(this)
     }
 
@@ -107,14 +108,33 @@ class UsuarioController {
             return res.status(500).json({ code: 500, resultado: null, error: `${this.tabela} não fornecido` })
         }
 
+        if (login.isEmployee) {
+            return this.loginEmployeer(res, login)
+        }
+
         var query = `Select * from ${this.tabela} where email = ? and senha = ?`
         this.mysql.query(query, [login.email, login.senha], function (error, results, fields) {
 
-            if (error) {
-                return res.status(200).json({ code: 500, resultado: null, error: `${this.tabela} não pode ser atualizado` })
+            if (error || !results[0]) {
+                return res.status(200).json({ code: 500, resultado: null, error: `${this.tabela} não pode ser encontrado` })
             }
 
-            const user = { ...results[0], senha: null }
+            const user = { ...results[0], senha: null, isEmployeer: false }
+
+            return res.status(200).json({ code: 200, resultado: user, error: null })
+        })
+    }
+
+    loginEmployeer(res, login) {
+
+        var query = `Select * from funcionario where email = ? and senha = ?`
+        this.mysql.query(query, [login.email, login.senha], function (error, results, fields) {
+
+            if (error || !results[0]) {
+                return res.status(200).json({ code: 500, resultado: null, error: `Funcionário não encontrado` })
+            }
+
+            const user = { ...results[0], senha: null, isEmployeer: true }
 
             return res.status(200).json({ code: 200, resultado: user, error: null })
         })
