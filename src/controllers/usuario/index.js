@@ -18,7 +18,7 @@ class UsuarioController {
         this.alterPassword = this.alterPassword.bind(this)
     }
 
-    create(req, res, next) {
+    async create(req, res, next) {
 
         var usuario = req.body.usuario
 
@@ -27,13 +27,41 @@ class UsuarioController {
         }
 
         var query = `insert into ${this.tabela} set ?`
-        this.mysql.query(query, { ...usuario }, function (error, results, fields) {
+        const promise_id = new Promise((resolve, reject) => {
 
-            if (error) {
-                return res.status(200).json({ code: 500, id: null, error: error })
-            }
+            this.mysql.query(query, { ...usuario }, function (error, results, fields) {
 
-            return res.status(200).json({ code: 200, id: results.insertId, error: null })
+                if (error) {
+                    return reject(error)
+                }
+    
+                return resolve(results.insertId)
+            })
+        })
+
+        promise_id.then((id) => {
+
+            new Promise((resolve, reject) => {
+
+                this.mysql.query(`Select * from usuario where id = ?`, id, function (error, results, fields) {
+
+                    if (error || !results.length) {
+                        return reject(error)
+                    }
+        
+                    const user = { ...results[0], senha: null, isEmployeer: false }
+                    return resolve(user)
+                })
+            })
+            .then((user) => {
+                return res.status(200).json({ code: 200, resultado: user, error: null })
+            })
+            .catch((error) => {
+                return res.status(200).json({ code: 200, resultado: null, error: error })
+            })
+        })
+        .catch((error) => {
+            return res.status(200).json({ code: 200, resultado: null, error: error })
         })
     }
 
