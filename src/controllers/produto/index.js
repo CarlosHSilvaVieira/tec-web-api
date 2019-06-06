@@ -21,7 +21,7 @@ class ProdutosController {
             return res.status(500).json({ code: 500, id: null, error: 'produto não fornecido' })
         }
 
-        var query = 'insert into produtos set ?'
+        var query = 'insert into produto set ?'
         this.mysql.query(query, { ...produto }, function (error, results, fields) {
 
             if (error) {
