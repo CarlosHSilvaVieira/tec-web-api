@@ -119,7 +119,7 @@ class UsuarioController {
             return res.status(500).json({ code: 500, resultado: null, error: `id da ${this.tabela} não fornecido` })
         }
 
-        this.mysql.query(`Delete * from ${this.tabela} where id = ${id}`, function (error, results, fields) {
+        this.mysql.query(`Delete from ${this.tabela} where id = ${id}`, function (error, results, fields) {
 
             if (error) {
                 return res.status(200).json({ code: 500, resultado: null, error: `${this.tabela} não encontrada` })
