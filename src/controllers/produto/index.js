@@ -103,10 +103,10 @@ class ProdutosController {
             return res.status(500).json({ code: 500, resultado: null, error: 'id do produto não fornecido' })
         }
 
-        this.mysql.query('Delete * from produto where id = ' + produto_id, function (error, results, fields) {
+        this.mysql.query('Delete from produto where id = ?', produto_id, function (error, results, fields) {
 
             if (error) {
-                return res.status(200).json({ code: 500, resultado: null, error: 'produto não encontrado' })
+                return res.status(200).json({ code: 500, resultado: null, error: error })
             }
 
             return res.status(200).json({ code: 200, resultado: results.affectedRows, error: null })
