@@ -162,7 +162,7 @@ class UsuarioController {
                 return res.status(200).json({ code: 500, resultado: null, error: `Funcionário não encontrado` })
             }
 
-            const user = { ...results[0], senha: null, isEmployeer: true }
+            const user = { ...results[0], senha: null, isEmployee: true }
 
             return res.status(200).json({ code: 200, resultado: user, error: null })
         })
