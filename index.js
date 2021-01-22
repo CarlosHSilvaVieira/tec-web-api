@@ -3,6 +3,7 @@ var bodyParse = require('body-parser');
 var cors = require('cors');
 
 // criando app
+require("dotenv").config();
 var app = express();
 var port = process.env.PORT || 3005;
 

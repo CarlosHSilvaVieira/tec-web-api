@@ -1,2 +1,8 @@
 #node modules
 /node_modules
+
+#ignoring env file
+.env
+
+#ignoring vscode configs
+/vscode
